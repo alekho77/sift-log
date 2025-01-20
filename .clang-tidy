@@ -1,0 +1,56 @@
+---
+Checks: >
+  -*,
+  bugprone-*,           # Detect potential bugs and risky code patterns
+  performance-*,        # Optimize code performance and efficiency
+  readability-*,        # Improve code readability and maintainability
+  modernize-*,          # Suggest usage of modern C++23 features
+  readability-identifier-naming,  # Ensure consistency in naming conventions
+  clang-analyzer-*      # Perform static analysis to detect potential issues
+  cppcoreguidelines-*   # Follow modern C++ core guidelines
+  misc-*                # Miscellaneous useful checks
+
+WarningsAsErrors: '*'   # Treat all warnings as errors to maintain strict code quality
+
+HeaderFilterRegex: '^(?!.*(gtest|boost)).*'  # Exclude test and third-party libraries from checks
+
+FormatStyle: file
+
+CheckOptions:
+  # Identifier naming conventions
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase      # Classes should follow CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack      # Functions should follow camelBack
+  - key: readability-identifier-naming.MemberCase
+    value: lower_case     # Member variables should follow lower_case
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: CamelCase      # Global variables should follow CamelCase
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: lower_case     # constexpr variables should follow lower_case
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case     # Function parameters should follow lower_case
+
+  # Allowed magic numbers
+  - key: readability-magic-numbers.IgnoreLiteralNumbers
+    value: '1,0,-1'       # Ignore these commonly used literal values
+
+  # Modern C++ standards (C++23)
+  - key: modernize-use-auto
+    value: 'true'         # Allow 'auto' for improved readability
+  - key: modernize-use-trailing-return
+    value: 'false'        # Disable trailing return types to maintain conventional style
+
+  # Performance considerations
+  - key: performance-unnecessary-value-param
+    value: 'false'        # Disable warnings for passing parameters by value
+  - key: bugprone-narrowing-conversions.WarnOnIntegerNarrowingConversion
+    value: 'true'         # Warn about potential data loss due to narrowing conversions
+
+  # Variable initialization enforcement
+  - key: cppcoreguidelines-init-variables.StrictMode
+    value: '1'            # Enforce strict initialization of variables
+
+  # Handling of braces for single-line statements
+  - key: readability-braces-around-statements.ShortStatementLines
+    value: '1'            # Enforce braces for better code clarity in single-line statements
