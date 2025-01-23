@@ -7,7 +7,9 @@ if (NOT DEFINED SIFT_INSTALL_DIR)
     set(SIFT_INSTALL_DIR "${CMAKE_BINARY_DIR}/install")
 endif ()
 
-set(SIFT_SOURCES)
+set(SIFT_SOURCES
+        log_searcher_factory.cpp
+)
 
 set(SIFT_HEADERS
         ${CMAKE_SOURCE_DIR}/interfaces/ILogSearcher.h
