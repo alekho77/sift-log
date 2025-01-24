@@ -13,7 +13,9 @@
 
 namespace sift {
 
-namespace io {}
+namespace io {
+class SearchBuffer; // Forward declaration to hide buffer implementation
+}
 
 namespace search {
 
@@ -36,13 +38,39 @@ struct SearchFilter {
     FilterOptions options;
 };
 
+enum class SearchErrorCode { Success, EndOfFile, BufferTooSmall, IOError, InvalidFilter };
+
+struct SearchStatus {
+    SearchErrorCode code;
+    std::string message;
+
+    SearchStatus(SearchErrorCode c, std::string msg = "") : code(c), message(std::move(msg)) {}
+
+    bool success() const {
+        return code == SearchErrorCode::Success;
+    }
+};
+
+struct MatchPosition {
+    size_t start;
+    size_t length;
+};
+
+struct SearchResult {
+    std::string_view matched_line;                   // Found string
+    size_t line_number;                              // Line number
+    std::vector<std::vector<MatchPosition>> matches; // Matches for each filter
+
+    std::shared_ptr<io::SearchBuffer> buffer_ref;
+};
+
 class ILogSearcher {
  public:
     virtual ~ILogSearcher() = default;
 
     virtual bool set_filters(const std::vector<SearchFilter>& filters) = 0;
 
-    virtual std::optional<std::string> get_next_line() = 0;
+    virtual std::optional<SearchResult> get_next_line(SearchStatus& status) = 0;
 };
 } // namespace search
 } // namespace sift
