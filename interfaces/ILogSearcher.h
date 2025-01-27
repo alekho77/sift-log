@@ -2,8 +2,8 @@
 // Created by alekho on 1/23/25.
 //
 
-#ifndef ILOGSEARCHER_H
-#define ILOGSEARCHER_H
+#ifndef SIFT_ILOGSEARCHER_H
+#define SIFT_ILOGSEARCHER_H
 
 #include <optional>
 #include <regex>
@@ -14,7 +14,11 @@
 namespace sift {
 
 namespace io {
-class SearchBuffer; // Forward declaration to hide buffer implementation
+class SearchBuffer;
+}
+
+namespace utils {
+class SiftStatus;
 }
 
 namespace search {
@@ -38,19 +42,6 @@ struct SearchFilter {
     FilterOptions options;
 };
 
-enum class SearchErrorCode { Success, EndOfFile, BufferTooSmall, IOError, InvalidFilter };
-
-struct SearchStatus {
-    SearchErrorCode code;
-    std::string message;
-
-    SearchStatus(SearchErrorCode c, std::string msg = "") : code(c), message(std::move(msg)) {}
-
-    bool success() const {
-        return code == SearchErrorCode::Success;
-    }
-};
-
 struct MatchPosition {
     size_t start;
     size_t length;
@@ -70,9 +61,9 @@ class ILogSearcher {
 
     virtual bool set_filters(const std::vector<SearchFilter>& filters) = 0;
 
-    virtual std::optional<SearchResult> get_next_line(SearchStatus& status) = 0;
+    virtual std::optional<SearchResult> get_next_line(utils::SiftStatus& status) = 0;
 };
 } // namespace search
 } // namespace sift
 
-#endif // ILOGSEARCHER_H
+#endif // SIFT_ILOGSEARCHER_H
